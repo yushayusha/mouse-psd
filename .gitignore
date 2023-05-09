@@ -1,0 +1,7 @@
+/.venv
+/build
+/exporter/build
+/exporter/dist
+/korefile.js
+kinc.dmp
+*.pyc

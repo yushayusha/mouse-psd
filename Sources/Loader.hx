@@ -4,9 +4,12 @@ import kha.Sound;
 import kha.Assets;
 import kha.Image;
 
+using Lambda;
+
 
 class Loader {
 	public static var prefix = "";
+	public static var loading(get, null):Bool;
 
 	static var loadingImages:Map<String, Array<Image->Void>> = [];
 	static var loadedImages:Map<String, Image> = [];
@@ -65,5 +68,12 @@ class Loader {
 				});
 			}, err -> trace(err));
 		}
+	}
+
+
+	static function get_loading() {
+		var loaded = !(loadedImages.empty() && loadedSounds.empty()),
+			remains = !(loadingImages.empty() && loadingSounds.empty());
+		return !loaded && remains;
 	}
 }

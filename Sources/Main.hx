@@ -48,6 +48,19 @@ class Main {
 		g.clear(stage.bgColor);
 		stage.draw(g);
 		g.popTransformation();
+
+		if (Loader.loading) {
+			var ww = System.windowWidth(), wh = System.windowHeight(),
+				sz = 0.9 + 0.1 * Math.sin(System.time * 7),
+				bl = 0.5 + 0.5 * Math.sin(System.time * 4),
+				tm = FastMatrix3.scale(sz, sz).multmat(FastMatrix3.rotation(System.time * 3));
+			tm._20 = ww - 22;
+			tm._21 = wh - 22;
+			g.pushTransformation(tm);
+			g.color = kha.Color.fromFloats(bl, bl, bl, 0.45);
+			g.fillRect(-15, -15, 30, 30);
+			g.color = kha.Color.White;
+		}
 		g.end();
 	}
 

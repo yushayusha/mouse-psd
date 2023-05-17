@@ -4,7 +4,7 @@ SOurce code of [MousePSD game engine](https://lampysprites.itch.io/mouse-psd). P
 
 ### Structure
 
-- Exporter GUI is a python program that processes resources and bundles them with runtime files. Does not need any building, but won't be very useful without runtimes.
+- Exporter GUI is a python program that processes resources and bundles them with runtime files.
 - Runtime, needed to run or export the project, is an executable (or js bundle) that is built separately.
 - Audio encoding is done with FFmpeg, whose executable should be placed into `tools/` subfolder.
 
@@ -40,4 +40,15 @@ Windows executable (for run and export):
 ```sh
 Kha\make.bat windows --build --compile
 copy build\windows exporter\platforms\windows
+```
+
+
+### Compiling your project
+
+There's a way to build the game as Kha project for [a wider range of platforms](https://github.com/kode/kha#supported-platforms) that do not use simple export, or add some custom logic to it. To do that, place the exported assets into a new folder inside the repo (say, `Assets`) and add following line to `khafile.js`:
+
+```js
+// const project = ... /* after this line */
+project.addAssets('Assets/**'); /* name of assets folder */
+// resolve(project) /* before this line*/
 ```

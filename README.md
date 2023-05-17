@@ -45,7 +45,7 @@ copy build\windows exporter\platforms\windows
 
 ### Compiling your project
 
-There's a way to build the game as Kha project for [a wider range of platforms](https://github.com/kode/kha#supported-platforms) that do not use simple export, or add some custom logic to it. To do that, place the exported assets into a new folder inside the repo (say, `Assets`) and add following line to `khafile.js`:
+There's a way to build the game as Kha project for [a wider range of platforms](https://github.com/kode/kha#supported-platforms) not simply supported in the exporter, or add some custom logic to it. To do that, place the exported assets into a new folder inside the repo (say, `Assets`) and add following line to `khafile.js`:
 
 ```js
 // const project = ... /* after this line */

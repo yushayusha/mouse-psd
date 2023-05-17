@@ -18,6 +18,18 @@ psd_types = (('Peesdee Files', '*.psd'), ('All Files', "*.*"))
 
 sg.theme('DarkGrey5')
 
+platforms = []
+buildf = path.join(path.dirname(__file__), 'build')
+
+if path.exists(path.join(buildf, 'windows')):
+    platforms.append('Windows')
+
+if path.exists(path.join(buildf, 'html5')):
+    platforms.append('HTML5')
+
+platforms.append('Assets Only')
+
+
 properties_window = [
             [sg.Text('Title', size=(11, 1)), sg.Input('MousePSD', key=':project', expand_x=True, tooltip='Used as window/page title, and executable name.')],
             [sg.Text('Window Size', size=(11, 1)), sg.Input('960x540', key=':size', expand_x=True, tooltip='Dimensions of the window. Does not affect asset size.')],
@@ -43,7 +55,7 @@ properties = [
 layout = [  [sg.Image(key=':preview', expand_x=True)],
             [sg.Input(key=':psd', visible=False, enable_events=True), sg.FileBrowse('Open...', file_types=psd_types, tooltip='Select PSD file to be used.'),
                 sg.Push(),
-                sg.DropDown(['HTML5', 'Windows'], default_value='Windows', key=':platform', readonly=True, disabled=True, tooltip='Which platform the bundle is made for.'),
+                sg.DropDown(platforms, default_value=platforms[0], key=':platform', readonly=True, disabled=True, tooltip='Which platform the bundle is made for.'),
                 sg.Button('Run', disabled=True, tooltip='Launch game.'),
                 sg.Input(key=':export', visible=False, enable_events=True), sg.FolderBrowse('Export', disabled=True, button_color=('#ffffff', '#ff8000'), tooltip='Bundle game files for distribution.'),
             ],
@@ -312,6 +324,23 @@ def open_psd(file):
     window.write_event_value(':set_status', '')
 
 
+def export_dump(values):
+    ui_lock_set(True)
+    dest = values[':export']
+    if not path.exists(dest):
+        window.write_event_value(':set_status', 'Path does not exist: ' + dest)
+
+    clean()
+    export(values, audio='ogg', pack=True)
+
+    temp = path.join(path.dirname(__file__), 'temp')
+    copytree(path.join(temp, 'res'), path.join(dest, 'res'), dirs_exist_ok=True)
+    copyfile(path.join(temp, 'psd.stage'), path.join(dest, 'psd.stage'))
+
+    ui_lock_set(False)
+    window.write_event_value(':set_status', '')
+
+
 def export_html(values):
     ui_lock_set(True)
     dest = values[':export']
@@ -327,8 +356,8 @@ def export_html(values):
 
     files = ['index.html', 'favicon.ico', 'kha.js']
     for f in files:
-        ff = os.path.join(os.path.dirname(__file__), 'build', 'html5', f)
-        copyfile(ff, os.path.join(dest, f))
+        ff = path.join(buildf, 'html5', f)
+        copyfile(ff, path.join(dest, f))
 
     ui_lock_set(False)
     window.write_event_value(':set_status', '')
@@ -347,8 +376,8 @@ def export_win32(values):
     copytree(path.join(temp, 'res'), path.join(dest, 'res'), dirs_exist_ok=True)
     copyfile(path.join(temp, 'psd.stage'), path.join(dest, 'psd.stage'))
 
-    exe = os.path.join(os.path.dirname(__file__), 'build', 'windows', 'MousePSD.exe')
-    copyfile(exe, os.path.join(dest, values[':project'] + '.exe'))
+    exe = path.join(buildf, 'windows', 'MousePSD.exe')
+    copyfile(exe, path.join(dest, values[':project'] + '.exe'))
 
     ui_lock_set(False)
     window.write_event_value(':set_status', '')
@@ -357,7 +386,7 @@ def export_win32(values):
 def test(values):
     ui_lock_set(True)
     export(values, audio='ogg')
-    exe = os.path.join(os.path.dirname(__file__), 'build', 'windows', 'MousePSD.exe')
+    exe = path.join(buildf, 'windows', 'MousePSD.exe')
     temp = path.join(path.dirname(__file__), 'temp')
     subprocess.Popen([exe, temp], creationflags=subprocess.DETACHED_PROCESS)
     ui_lock_set(False)
@@ -395,6 +424,8 @@ while True:
             window.perform_long_operation(lambda: export_html(values), ':exported')
         elif values[':platform'] == 'Windows':
             window.perform_long_operation(lambda: export_win32(values), ':exported')
+        elif values[':platform'] == 'Assets Only':
+            window.perform_long_operation(lambda: export_dump(values), ':exported')
 
     if event == ':exported':
         webbrowser.open(values[':export'])

@@ -329,6 +329,7 @@ def export_dump(values):
     dest = values[':export']
     if not path.exists(dest):
         window.write_event_value(':set_status', 'Path does not exist: ' + dest)
+        return
 
     clean()
     export(values, audio='ogg', pack=True)
@@ -346,6 +347,7 @@ def export_html(values):
     dest = values[':export']
     if not path.exists(dest):
         window.write_event_value(':set_status', 'Path does not exist: ' + dest)
+        return
 
     clean()
     export(values, audio='mp3', pack=True)
@@ -368,6 +370,7 @@ def export_win32(values):
     dest = values[':export']
     if not path.exists(dest):
         window.write_event_value(':set_status', 'Path does not exist: ' + dest)
+        return
 
     clean()
     export(values, audio='ogg', pack=True)

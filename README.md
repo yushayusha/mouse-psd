@@ -8,9 +8,13 @@ SOurce code of [MousePSD game engine](https://lampysprites.itch.io/mouse-psd). P
 - Exporter is a python program that processes resources and bundles them with brebuilt runtime files.
 
 ### Obtaining code
-Recursive clone is important.
+Unless you have Kha set up somewhere else (eg vscode extension), use recursive clone:
 ```sh
-git clone --recursive --init ssh://git@github.com/lampysprites/mouse-psd
+git clone --recursive --init --depth 1 ssh://git@github.com/lampysprites/mouse-psd
+# if windows
+mouse-psd\Kha\get_dlc.bat
+# if linux or macox
+./mouse-psd/Kha/get_dlc
 ```
 
 ### Compiling runtimes

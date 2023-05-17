@@ -1,4 +1,3 @@
 [submodule "Kha"]
 	path = Kha
-	url = https://github.com/Kode/Kha.git
-	branch = main
+	url = ssh://git@github.com/Kode/Kha

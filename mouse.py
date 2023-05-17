@@ -327,7 +327,7 @@ def export_html(values):
 
     files = ['index.html', 'favicon.ico', 'kha.js']
     for f in files:
-        ff = os.path.join(os.path.dirname(__file__), 'platforms', 'html5', f)
+        ff = os.path.join(os.path.dirname(__file__), 'build', 'html5', f)
         copyfile(ff, os.path.join(dest, f))
 
     ui_lock_set(False)
@@ -347,7 +347,7 @@ def export_win32(values):
     copytree(path.join(temp, 'res'), path.join(dest, 'res'), dirs_exist_ok=True)
     copyfile(path.join(temp, 'psd.stage'), path.join(dest, 'psd.stage'))
 
-    exe = os.path.join(os.path.dirname(__file__), 'platforms', 'windows', 'MousePSD.exe')
+    exe = os.path.join(os.path.dirname(__file__), 'build', 'windows', 'MousePSD.exe')
     copyfile(exe, os.path.join(dest, values[':project'] + '.exe'))
 
     ui_lock_set(False)
@@ -357,7 +357,7 @@ def export_win32(values):
 def test(values):
     ui_lock_set(True)
     export(values, audio='ogg')
-    exe = os.path.join(os.path.dirname(__file__), 'platforms', 'windows', 'MousePSD.exe')
+    exe = os.path.join(os.path.dirname(__file__), 'build', 'windows', 'MousePSD.exe')
     temp = path.join(path.dirname(__file__), 'temp')
     subprocess.Popen([exe, temp], creationflags=subprocess.DETACHED_PROCESS)
     ui_lock_set(False)

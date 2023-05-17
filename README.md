@@ -4,8 +4,9 @@ SOurce code of [MousePSD game engine](https://lampysprites.itch.io/mouse-psd). P
 
 ### Structure
 
-- Runtime is a haxe/Kha program, which becomes the executable or js bundle.
-- Exporter is a python program that processes resources and bundles them with brebuilt runtime files.
+- Exporter GUI is a python program that processes resources and bundles them with runtime files. Does not need any building, but won't be very useful without runtimes.
+- Runtime, needed to run or export the project, is an executable (or js bundle) that is built separately.
+- Audio encoding is done with FFmpeg, whose executable should be placed into `tools/` subfolder.
 
 ### Obtaining code
 Unless you have Kha set up somewhere else (eg vscode extension), use recursive clone:
@@ -17,32 +18,26 @@ mouse-psd\Kha\get_dlc.bat
 ./mouse-psd/Kha/get_dlc
 ```
 
-### Compiling runtimes
-This project is build with Kha framework, and relies on its khamake capabilities. The commands below demonstrate its usage on windows.
+### Running exporter
 
-HTML5 bundle
+Requires [python3](https://python.org).
+
+```py
+pip install -r requirements.txt
+python mouse.py
+```
+
+### Compiling runtimes
+This project is build with [Kha framework](https://github.com/Kode/Kha), and relies on its khamake capabilities. The commands below demonstrate its usage on windows.
+
+HTML5 bundle (for export):
 ```sh
 Kha\make.bat html5
 copy build\html5 exporter\platforms\html5
 ```
 
-Windows executable
+Windows executable (for run and export):
 ```sh
 Kha\make.bat windows --build --compile
 copy build\windows exporter\platforms\windows
 ```
-
-### Running the GUI
-
-Installing dependencies:
-```py
-pip install -r requirements.txt
-```
-
-Launching:
-```py
-python mouse.py
-```
-
-- To run/build the user game with exporter, built artifacts must be placed into appropriate subfolder inside `platforms` folder.
-- For audio compression to work, place ffmpeg executable into `tools` folder.

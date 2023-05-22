@@ -59,8 +59,7 @@ class Dragger {
 
     function onUp(b:Int, x:Int, y:Int) {
         if (b == 0 && layer != null) {
-            x = Std.int(scale.unscaleX(x));
-            y = Std.int(scale.unscaleY(y));
+            ensureInBounds(layer);
 
             if (sfx != null)
                 Audio.play(sfx);
@@ -86,6 +85,21 @@ class Dragger {
 		    kha.input.Mouse.get().setSystemCursor(cursor);
         }
     }
+
+
+    function ensureInBounds(layer:Layer) {
+        var xmin = scale.unscaleX(0), 
+            xmax = scale.unscaleX(System.windowWidth()),
+            ymin = scale.unscaleY(0),
+            ymax = scale.unscaleY(System.windowHeight());
+        
+            if (layer.pos.x + layer.size.x < xmin || layer.pos.x > xmax ||
+                    layer.pos.y + layer.size.y < ymin || layer.pos.y > ymax) {
+                layer.pos.x = layer.data.pos[0];
+                layer.pos.y = layer.data.pos[1];
+            }
+    }
+
 
     function isLink(layer:Layer) {
         return layer.name.startsWith("https://") || layer.name.startsWith("http://");

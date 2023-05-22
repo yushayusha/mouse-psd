@@ -10,15 +10,19 @@ using Lambda;
 
 class Loader {
 	public static var prefix = "";
+	public static var attempts = 1;
 	public static var loading(get, null):Bool;
 
 	static var loadingImages:Map<String, Array<Image->Void>> = [];
 	static var loadedImages:Map<String, Image> = [];
 
 
-	public static function loadImage(filename:String, done:Image->Void) {
+	public static function loadImage(filename:String, done:Image->Void, ?tries:Int=-1) {
 		if (prefix != "" && !Path.isAbsolute(filename))
 			filename = Path.join([prefix, filename]);
+
+		if (tries < 0)
+			tries = attempts;
 		
 		if (loadedImages.exists(filename)) {
 			done(loadedImages[filename]);
@@ -35,7 +39,15 @@ class Loader {
 						donest(img);
 					loadingImages.remove(filename);
 				}
-			}, err -> trace(err));
+			}, err -> {
+				if (tries > 0) {
+					trace('retry loading $filename');
+					loadImage(filename, _ -> {}, tries - 1);
+				} else {
+					trace('failed to load $filename');
+					loadingImages.remove(filename);
+				}
+			});
 		}
 	}
 
@@ -43,9 +55,12 @@ class Loader {
 	static var loadingSounds:Map<String, Array<Sound->Void>> = [];
 	static var loadedSounds:Map<String, Sound> = [];
 
-	public static function loadSound(filename:String, done:Sound->Void) {
+	public static function loadSound(filename:String, done:Sound->Void, ?tries:Int=-1) {
 		if (prefix != "" && !Path.isAbsolute(filename))
 			filename = Path.join([prefix, filename]);
+
+		if (tries < 0)
+			tries = attempts;
 
 		if (loadedSounds.exists(filename)) {
 			done(loadedSounds[filename]);
@@ -64,7 +79,15 @@ class Loader {
 						loadingSounds.remove(filename);
 					}
 				});
-			}, err -> trace(err));
+			},	err -> {
+				if (tries > 0) {
+					trace('retry loading $filename');
+					loadSound(filename, _ -> {}, tries - 1);
+				} else {
+					trace('failed to load $filename');
+					loadingSounds.remove(filename);
+				}
+			});
 		}
 	}
 

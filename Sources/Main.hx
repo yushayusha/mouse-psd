@@ -82,6 +82,7 @@ class Main {
 			}
 #elseif kha_html5
 			Loader.prefix = "res";
+			Loader.attempts = 3;
 #end
 			Assets.loadBlobFromPath(stageFile, b -> new Main(b.toString()));
 		});

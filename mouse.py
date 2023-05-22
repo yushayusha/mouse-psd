@@ -188,7 +188,7 @@ def save_atlas(records):
                     area += w * h
                     packer.add_rect(w, h, lr)
                 else:
-                    fname = f'i{token_hex(12)}'
+                    fname = f'i{token_hex(12)}.png'
                     rec['image'].save(path.join(path.dirname(__file__), 'temp', 'res', fname), format='PNG', optimize=True)
                     rec['image'].close()
                     rec['image'] = fname
@@ -198,7 +198,7 @@ def save_atlas(records):
                 area += w * h
                 packer.add_rect(w, h, rec)
             else:
-                fname = f'i{token_hex(12)}'
+                fname = f'i{token_hex(12)}.png'
                 rec['image'].save(path.join(path.dirname(__file__), 'temp', 'res', fname), format='PNG', optimize=True)
                 rec['image'].close()
                 rec['image'] = fname
@@ -218,7 +218,7 @@ def save_atlas(records):
 
     for page in packer:
         tx = PIL.Image.new('RGBA', (page.width, page.height), '#00000000')
-        fname = f'p{token_hex(12)}'
+        fname = f'p{token_hex(12)}.png'
 
         for rect in page:
             rec = rect.rid
@@ -236,7 +236,7 @@ def save_images(records):
         if rec['group']:
             save_images(rec['layers'])
         else:
-            fname = f'i{token_hex(12)}'
+            fname = f'i{token_hex(12)}.png'
             rec['image'].save(path.join(path.dirname(__file__), 'temp', 'res', fname), format='PNG', optimize=True)
             rec['image'].close()
             rec['image'] = fname

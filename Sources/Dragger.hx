@@ -43,6 +43,8 @@ class Dragger {
 
                 stage.raise(layer);
             }
+            
+		    kha.input.Mouse.get().setSystemCursor(Grabbing);
         }
     }
 
@@ -56,17 +58,21 @@ class Dragger {
                 Audio.play(sfx);
 
             layer = null;
+		    kha.input.Mouse.get().setSystemCursor(Default);
         }
     }
 
 
     function onMove(x:Int, y:Int, dx:Int, dy:Int) {
-        if (layer != null) {
-            x = Std.int(scale.unscaleX(x));
-            y = Std.int(scale.unscaleY(y));
+        x = Std.int(scale.unscaleX(x));
+        y = Std.int(scale.unscaleY(y));
 
+        if (layer != null) {
             layer.pos.x = x - offsetX;
             layer.pos.y = y - offsetY;
+        } else {
+            var under = stage.pick(x, y);
+		    kha.input.Mouse.get().setSystemCursor(under == null ? Default : Grab);
         }
     }
 }

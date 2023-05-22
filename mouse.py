@@ -353,7 +353,7 @@ def export_html(values):
     export(values, audio='mp3', pack=True)
 
     temp = path.join(path.dirname(__file__), 'temp')
-    copytree(path.join(temp, 'res'), dest, dirs_exist_ok=True)
+    copytree(path.join(temp, 'res'), path.join(dest, 'res'), dirs_exist_ok=True)
     copyfile(path.join(temp, 'psd.stage'), path.join(dest, 'psd.stage'))
 
     files = ['index.html', 'favicon.ico', 'kha.js']

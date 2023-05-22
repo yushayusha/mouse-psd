@@ -1,5 +1,6 @@
 package;
 
+import haxe.io.Path;
 import kha.Sound;
 import kha.Assets;
 import kha.Image;
@@ -16,10 +17,9 @@ class Loader {
 
 
 	public static function loadImage(filename:String, done:Image->Void) {
-#if cpp
-		if (prefix != "")
-			filename = haxe.io.Path.join([prefix, filename]);
-#end
+		if (prefix != "" && !Path.isAbsolute(filename))
+			filename = Path.join([prefix, filename]);
+		
 		if (loadedImages.exists(filename)) {
 			done(loadedImages[filename]);
 		} else if (loadingImages.exists(filename)) {
@@ -44,10 +44,8 @@ class Loader {
 	static var loadedSounds:Map<String, Sound> = [];
 
 	public static function loadSound(filename:String, done:Sound->Void) {
-#if cpp
-		if (prefix != "")
-			filename = haxe.io.Path.join([prefix, filename]);
-#end
+		if (prefix != "" && !Path.isAbsolute(filename))
+			filename = Path.join([prefix, filename]);
 
 		if (loadedSounds.exists(filename)) {
 			done(loadedSounds[filename]);

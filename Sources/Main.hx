@@ -7,6 +7,7 @@ import kha.Window;
 import kha.Assets;
 import kha.Framebuffer;
 import kha.System;
+import haxe.io.Path;
 
 #if kha_html5
 import js.Browser.document;
@@ -73,12 +74,14 @@ class Main {
 #if cpp
 			var args = Sys.args();
 			if (args.length > 0) {
-				stageFile = haxe.io.Path.join([args[0], stageFile]);
-				Loader.prefix = haxe.io.Path.join([args[0], "res"]);
+				stageFile = Path.join([args[0], stageFile]);
+				Loader.prefix = Path.join([args[0], "res"]);
 			} else {
-				Loader.prefix = haxe.io.Path.directory(Sys.programPath());
-				Loader.prefix = haxe.io.Path.join([Loader.prefix, "res"]);
+				Loader.prefix = Path.directory(Sys.programPath());
+				Loader.prefix = Path.join([Loader.prefix, "res"]);
 			}
+#elseif kha_html5
+			Loader.prefix = "res";
 #end
 			Assets.loadBlobFromPath(stageFile, b -> new Main(b.toString()));
 		});
@@ -86,7 +89,7 @@ class Main {
 
 	
 	static function setFullWindowCanvas():Void {
-		#if kha_html5
+#if kha_html5
 		document.documentElement.style.padding = "0";
 		document.documentElement.style.margin = "0";
 		document.body.style.padding = "0";
@@ -109,6 +112,6 @@ class Main {
 		}
 		window.onresize = resize;
 		resize();
-		#end
+#end
 	}
 }

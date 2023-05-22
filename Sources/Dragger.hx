@@ -3,6 +3,8 @@ package;
 import kha.audio1.Audio;
 import kha.Sound;
 import kha.input.Mouse;
+import kha.System;
+using StringTools;
 
 class Dragger {
     var stage:Stage;
@@ -35,13 +37,19 @@ class Dragger {
             layer = stage.pick(x, y);
 
             if (layer != null) {
-                offsetX = Std.int(x - layer.pos.x);
-                offsetY = Std.int(y - layer.pos.y);
+                if (isLink(layer)) {
+                    System.loadUrl(layer.name);
+                    layer = null;
 
-                if (sfx != null)
-                    Audio.play(sfx);
+                } else {
+                    offsetX = Std.int(x - layer.pos.x);
+                    offsetY = Std.int(y - layer.pos.y);
 
-                stage.raise(layer);
+                    if (sfx != null)
+                        Audio.play(sfx);
+
+                    stage.raise(layer);
+                }
             }
             
 		    kha.input.Mouse.get().setSystemCursor(Grabbing);
@@ -71,8 +79,15 @@ class Dragger {
             layer.pos.x = x - offsetX;
             layer.pos.y = y - offsetY;
         } else {
-            var under = stage.pick(x, y);
-		    kha.input.Mouse.get().setSystemCursor(under == null ? Default : Grab);
+            var under = stage.pick(x, y),
+                cursor = if (under == null) Default;
+                    else if (isLink(under)) Pointer;
+                    else Grab; 
+		    kha.input.Mouse.get().setSystemCursor(cursor);
         }
+    }
+
+    function isLink(layer:Layer) {
+        return layer.name.startsWith("https://") || layer.name.startsWith("http://");
     }
 }

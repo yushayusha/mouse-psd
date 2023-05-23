@@ -1,6 +1,6 @@
 # MousePSD
 
-SOurce code of [MousePSD game engine](https://lampysprites.itch.io/mouse-psd). Please visit the linked page for a ready to use distribution of the program.
+Source code of [MousePSD game engine](https://lampysprites.itch.io/mouse-psd). Please visit the linked page for a ready to use distribution of the program.
 
 ### Structure
 

@@ -1,7 +1,7 @@
 from psd_tools import PSDImage
 from psd_tools.api.layers import Layer, Tag
 import io
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 import os
 from os import path
 from shutil import rmtree, copytree, copyfile
